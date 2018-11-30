@@ -1,6 +1,6 @@
 const cluster = require("cluster");
 require('events').EventEmitter.prototype._maxListeners = 100; // increase (MaxListenersExceededWarning) the default limit globally
-require(cluster.isMaster ? "./master" : "./node_proxy_worker");
+require(cluster.isMaster ? "./master" : "./node_auth_worker");
 
 // uncaughtException handler
 process.on("uncaughtException", err => {

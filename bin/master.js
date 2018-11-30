@@ -1,3 +1,5 @@
+// todo refactor this to AUTH behavior
+
 /*
  * Master process behavior
  * 0. [MASTER] init RPC channel connection
@@ -30,7 +32,7 @@ for (let i = 0; i < workers; ++i) cluster.fork();
 const sendMsgToRandWorker = (payload) => cluster.workers[Math.floor(Math.random() * (workers - 1)) + 1].send(payload);
 
 /** REDIS RPC + cluster RPC chatting behavior */
-const node_rpc_channel = channel.jrpc('master');
+const node_rpc_channel = channel.auth('master');
 const redisRpc = require('node-redis-rpc');
 console.log(`[MASTER node]: Init RPC service "${node_rpc_channel}"`);
 const rpc = new redisRpc(redis_cfg);
@@ -41,7 +43,7 @@ rpc.on(node_rpc_channel, ({ payload }, channel, done) =>{
   // send MSG to Random Worker
   sendMsgToRandWorker(payload);
   // MSG handler from WORKER
-  const messageHandler = ({ msg, worker, node_type }) => {
+  const messageHandler = ({ msg, worker }) => {
     // check error from worker
     if(msg.error) return done(error);
     // Trigger done handler to fire back rpc result
@@ -50,8 +52,7 @@ rpc.on(node_rpc_channel, ({ payload }, channel, done) =>{
     done(null, {
       msg: msg,
       worker: worker,
-      channel: node_rpc_channel,
-      node_type: node_type
+      channel: node_rpc_channel
     });
   };
   // handle message from worker
