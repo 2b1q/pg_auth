@@ -8,7 +8,18 @@ const config = {};
 
 /** Common config for all ENV */
 const api_version = "v. 2.0",
-  project = "BANKEX Payment-gateway-JSON-RPC-node-proxy";
+  project = "BANKEX Payment-gateway-AUTH service";
+
+// DB collections
+const cols = {
+  // common base cols
+  base: {},
+  // user collections
+  user: {
+    tokens: "user_tokens", // store user tokens
+    users: "users" // store user data
+  }
+};
 
 // colorize console
 const color = {
@@ -24,26 +35,9 @@ const color = {
 
 /** Staging (default) environment */
 config.staging = {
-  nodes: {
-    btc: {
-      protocol: "http",
-      host: "34.217.183.33",
-      port: 8332,
-      user: "",
-      pass: "",
-      timeout: 30000
-    },
-    ltc: {
-      protocol: "http",
-      host: "34.219.117.248",
-      port: 9332,
-      user: "",
-      pass: "",
-      timeout: 30000
-    }
-  },
   api_version: api_version,
   project: project,
+  user_pass_hash_secret: "sup4_Dup4#sEcreD", // user pass hash secret
   /** ============= NEED TO BE SPECIFIED ============= */
   store: {
     redis: {
@@ -57,6 +51,18 @@ config.staging = {
       nm: wid => typeof wid === 'undefined' ? 'pg_nm:' : 'pg_nm:' + wid,
     }
   },
+  mongo: {
+    uri: "localhost:27017", // hardcoded
+    dbname: process.env.dbname || "pgw",
+    dbuser: process.env.dbuser || "pgwUser",
+    dbpass: process.env.dbpass || "pgwPass",
+    options: {
+      // autoIndex: false,
+      useNewUrlParser: true
+      // poolSize: 10 // количество подключений в пуле
+    }
+  },
+  user: cols.user,
   color: color
 };
 /** END OF Staging (default) environment */
@@ -67,24 +73,7 @@ config.production = {};
 
 /** Dev environment */
 config.dev = {
-  nodes: {
-    btc: {
-      protocol: "http",
-      host: "34.217.183.33",
-      port: 8332,
-      user: "",
-      pass: "",
-      timeout: 30000
-    },
-    ltc: {
-      protocol: "http",
-      host: "34.219.117.248",
-      port: 9332,
-      user: "",
-      pass: "",
-      timeout: 30000
-    }
-  },
+  user_pass_hash_secret: "sup4_Dup4#sEcreD", // user pass hash secret
   api_version: api_version,
   project: project,
   /** ============= NEED TO BE SPECIFIED ============= */
@@ -98,7 +87,19 @@ config.dev = {
       jrpc: wid => typeof wid === 'undefined' ? 'pg_jrpc:' : 'pg_jrpc:' + wid,
       auth: wid => typeof wid === 'undefined' ? 'pg_auth:' : 'pg_auth:' + wid,
       nm: wid => typeof wid === 'undefined' ? 'pg_nm:' : 'pg_nm:' + wid,
-    }
+    },
+    mongo: {
+      uri: process.env.dburi || "mongo:27017",
+      dbname: process.env.dbname || "pgw_dev",
+      dbuser: process.env.dbuser || "pgwUser",
+      dbpass: process.env.dbpass || "pgwPass",
+      options: {
+        // autoIndex: false,
+        useNewUrlParser: true
+        // poolSize: 10 // количество подключений в пуле
+      }
+    },
+    user: cols.user
   },
   color: color
 };
