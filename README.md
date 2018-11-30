@@ -1,6 +1,6 @@
-# PaymentGateway AUTH srvice [PG_auth]
+# PaymentGateway AUTH service [PG_auth]
 
-**PG_auth** is stateless async microservice with Redis RPC interaction
+**PG_auth** is stateless async micro service with Redis RPC interaction
 
 ### Components ###
 * node.js vertical cluster ([MASTER] fork [WORKER] processes by count of CPU cores) 
