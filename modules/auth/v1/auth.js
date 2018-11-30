@@ -11,6 +11,7 @@ const {
         user: { users: user_col }
     }
 } = require("../../../config/config");
+const dbRequestTimer = `${c.yellow}[timer]${c.white} DB request time`;
 
 /** get modules */
 const crypto = require("crypto"),
