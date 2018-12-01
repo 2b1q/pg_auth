@@ -10,8 +10,17 @@ const worker = require("cluster").worker,
 // handle msg from master
 worker.on('message', (msg) => {
   console.log(`${c.green}WORKER[${wid}] got MSG\n${c.white}`, msg);
-   worker.send({
-      msg: { auth: 'ok' },
-      worker: wid
-    }); // send node_response to master process
+  let { user, pass } = msg;
+  let response = {
+    error: null,
+    msg: { auth: false },
+    worker: wid
+  };
+  // debug auth checker
+  if(user !== 'bbq') {
+    console.error(`User "${user}" unauthorized`);
+    return worker.send(response);
+  }
+  response.msg.auth = true;
+   worker.send(response); // send node_response to master process
   });

@@ -43,9 +43,10 @@ rpc.on(node_rpc_channel, ({ payload }, channel, done) =>{
   // send MSG to Random Worker
   sendMsgToRandWorker(payload);
   // MSG handler from WORKER
-  const messageHandler = ({ msg, worker }) => {
+  const messageHandler = ({ msg, worker, error }) => {
     // check error from worker
-    if(msg.error) return done(error);
+    if(error) return done(msg.error);
+    if(!msg.auth) return done({err: 'Unauthorized'});
     // Trigger done handler to fire back rpc result
     // - first arg:  error status
     // - second arg: result data
