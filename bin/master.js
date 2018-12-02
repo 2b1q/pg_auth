@@ -1,5 +1,3 @@
-// todo refactor this to AUTH behavior
-
 /*
  * Master process behavior
  * 0. [MASTER] init RPC channel connection
@@ -45,8 +43,7 @@ rpc.on(node_rpc_channel, ({ payload }, channel, done) =>{
   // MSG handler from WORKER
   const messageHandler = ({ msg, worker, error }) => {
     // check error from worker
-    if(error) return done(msg.error);
-    if(!msg.auth) return done({err: 'Unauthorized'});
+    if(error) return done(error);
     // Trigger done handler to fire back rpc result
     // - first arg:  error status
     // - second arg: result data

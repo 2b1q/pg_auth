@@ -7,12 +7,9 @@ const {
     api_version: API_VERSION,
     color: c,
     user_pass_hash_secret: secret,
-    store: {
-        user: { users: user_col }
-    }
-} = require("../../../config/config");
-const dbRequestTimer = `${c.yellow}[timer]${c.white} DB request time`;
-
+    store: { user: { users: user_col } }
+    } = require("../../../config/config"),
+    dbRequestTimer = `${c.yellow}[timer]${c.white} DB request time`;
 /** get modules */
 const crypto = require("crypto"),
     moment = require("moment"),
@@ -214,4 +211,4 @@ exports.checkAuth = (user, pass) =>
     });
 
 /** Check adapter client by JWT */
-exports.adapter = token => new Promise((resolve, reject) => {});
+// exports.adapter = token => new Promise((resolve, reject) => {});
