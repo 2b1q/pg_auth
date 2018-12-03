@@ -1,5 +1,5 @@
 const cfg = require("../config/config"),
-  { color: c } = cfg,
+  { color: c, api_version: API_VERSION } = cfg,
   worker = require("cluster").worker,
   { id: wid } = worker, // access to cluster.worker.id
   { checkAuth, newUser } = require("../modules/auth/v1/auth");
@@ -15,14 +15,15 @@ const wid_ptrn = endpoint =>
 // handle msg from master
 worker.on("message", msg => {
   console.log(`${c.green}WORKER[${wid}] got MSG\n${c.white}`, msg);
-  let { user, pass } = msg;
+  let { user, pass, method } = msg;
   // response pattern
   let response = {
     error: null,
     msg: null,
     worker: wid
   };
-  checkAuth(user, pass)
+  // check if AUTH method
+  if(method === 'auth') return  checkAuth(user, pass)
     .then(result => {
       console.log(wid_ptrn(`User ${user} authorized`));
       console.log(result);
@@ -34,4 +35,18 @@ worker.on("message", msg => {
       response.error = err;
       worker.send(response); // send node_response to master process
     });
+  // check if REG method
+  if(method === 'regUser') return newUser(user, pass)
+  .then(result => {
+    console.log(wid_ptrn(`User ${user} created`));
+    console.log(result);
+    response.msg = result;
+    worker.send(response); // send node_response to master process
+  })
+  .catch(err => {
+    console.error("user creation error", err);
+    response.error = err;
+    worker.send(response); // send node_response to master process
+  });
+
 });

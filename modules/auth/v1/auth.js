@@ -86,7 +86,7 @@ exports.newUser = (user, pwd) =>
                 .then(({ services, login }) => {
                     msg_container.msg = "new user created successfully";
                     msg_container.reg_services = services;
-                    msg_container.json_rpc_logins = services.map(service => service + "@" + login); // add virtual logins for RPC requests
+                    // msg_container.json_rpc_logins = services.map(service => service + "@" + login); // add virtual logins for RPC requests
                     msg_container.rest_services_login = login;
                     console.log(msg_container);
                     return resolve(msg_container);
@@ -107,7 +107,7 @@ exports.newUser = (user, pwd) =>
             if (passHashFromRequest === passHashFromDB) {
                 msg_container.msg = "user already exists";
                 msg_container.reg_services = user_services;
-                msg_container.json_rpc_logins = user_services.map(service => service + "@" + user); // add virtual logins for RPC requests
+                // msg_container.json_rpc_logins = user_services.map(service => service + "@" + user); // add virtual logins for RPC requests
                 msg_container.rest_services_login = user;
                 return resolve(msg_container);
             }
