@@ -48,4 +48,7 @@ worker.on("message", msg => {
                 response.error = err;
                 worker.send(response); // send node_response to master process
             });
+    // unknown method error
+    response.error = "Unknown method";
+    worker.send(response); // send node_response to master process
 });
