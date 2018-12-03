@@ -38,7 +38,7 @@ worker.on("message", msg => {
     if (method === "regUser")
         return newUser(user, pass)
             .then(result => {
-                console.log(wid_ptrn(`User ${user} created`));
+                console.log(wid_ptrn(result.msg));
                 console.log(result);
                 response.msg = result;
                 worker.send(response); // send node_response to master process
