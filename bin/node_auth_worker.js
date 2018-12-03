@@ -1,17 +1,19 @@
-const cfg = require('../config/config'),
-    { color: c } = cfg,
-     worker = require("cluster").worker,
-    { id: wid } = worker, // access to cluster.worker.id
-    { checkAuth, newUser} = require('../modules/auth/v1/auth');
+const cfg = require("../config/config"),
+  { color: c } = cfg,
+  worker = require("cluster").worker,
+  { id: wid } = worker, // access to cluster.worker.id
+  { checkAuth, newUser } = require("../modules/auth/v1/auth");
 
 // current module
 const _module_ = "auth controller worker";
 // worker id pattern
 const wid_ptrn = endpoint =>
-  `${c.green}worker[${wid}]${c.red}[RPC]${c.yellow}[${API_VERSION}]${c.cyan}[${_module_}]${c.red} > ${c.green}[${endpoint}] ${c.white}`;
+  `${c.green}worker[${wid}]${c.red}[RPC]${c.yellow}[${API_VERSION}]${
+    c.cyan
+  }[${_module_}]${c.red} > ${c.green}[${endpoint}] ${c.white}`;
 
 // handle msg from master
-worker.on('message', (msg) => {
+worker.on("message", msg => {
   console.log(`${c.green}WORKER[${wid}] got MSG\n${c.white}`, msg);
   let { user, pass } = msg;
   // response pattern
@@ -28,9 +30,8 @@ worker.on('message', (msg) => {
       worker.send(response); // send node_response to master process
     })
     .catch(err => {
-      console.error('unauthorized', err);
+      console.error("unauthorized", err);
       response.error = err;
       worker.send(response); // send node_response to master process
     });
-
-  });
+});

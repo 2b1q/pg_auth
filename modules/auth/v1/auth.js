@@ -3,11 +3,13 @@
  * */
 /** get cfg */
 const {
-    nodes,
-    api_version: API_VERSION,
-    color: c,
-    user_pass_hash_secret: secret,
-    store: { user: { users: user_col } }
+        nodes,
+        api_version: API_VERSION,
+        color: c,
+        user_pass_hash_secret: secret,
+        store: {
+            user: { users: user_col }
+        }
     } = require("../../../config/config"),
     dbRequestTimer = `${c.yellow}[timer]${c.white} DB request time`;
 /** get modules */
